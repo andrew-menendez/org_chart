@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <meta charset="UTF-8">
+<head>
+  <!-- take out if putting in confluence -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
 <style>
 
 .node circle {
@@ -20,31 +25,47 @@
 
 </style>
 
+
+
 <body>
+
+
+
+  
+<script src="https://use.fontawesome.com/30579762f6.js"></script>
 
 <!-- load the d3.js library -->	
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
+$( document ).ready(function() {
+    console.log( "ready!" );
+
+
 var treeData =
   {
     "name": "Biz Opps",
+    "type":"dep",
     "children": [
       { 
         "name": "DAP",
+        "type": "dep",
         "children": [
-          { "name": "Max" }
+          { "name": "Max K",
+            "location":"SF" }
         ]
       },
       { 
         "name": "Business Intelligence",
+        "type":"dep",
         "children": [
-          { "name": "Amanda",
-            "children": [{"name":"Dylan"}]
+          { "name": "Amanda S",
+            "children": [{"name":"Dylan R"}]
            }
         ]
       },
       { "name": "Solutions Architects",
+        "type":"dep",
         "children":[
           {"name": "Yossi",
           "children":[{"name":"Will A"},{"name":"Andrew B"},{"name":"Tal D"},{"name":"Will F"}, {"name":"Nick L"},{"name":"Tom M"},{"name":"Andrew M"},{"name":"Yoav M"},{"name":"Melissa Z"}
@@ -52,9 +73,11 @@ var treeData =
         }]
       },
       {"name":"Customer Success Strategists",
+      "type":"dep",
       "children":[{"name":"Jaclyn D"}, {"name":"Amy L"}]
       },
       {"name":"UX/ UI Design",
+      "type":"dep",
       "children":[
         {"name":"Matt B",
         "children":[{"name":"Gintah T"}, {"name":"Lea G"}, {"name":"Allie V"}]
@@ -147,7 +170,28 @@ function update(source) {
       .attr("text-anchor", function(d) {
           return d.children || d._children ? "end" : "start";
       })
-      .text(function(d) { return d.data.name; });
+      .text(function(d) { return d.data.name; })
+
+  // AM - add  icons to node if not a department
+
+  nodeEnter.append('svg:foreignObject')
+    .attr("width", 50)
+    .attr("height",50)
+    .attr("x", "20px")
+    .attr("y", "12px")
+    .html(function(d){
+      console.log(d.data)
+      if (d.data.type === "dep"){
+        return ''
+      }
+      else {
+        return '<i class="fa fa-address-card-o" aria-hidden="true"></i>'
+      } 
+    })
+    // .on('click', function(d,i){
+    //   console.log("hello")
+    //   console.log(d.data)
+    // });
 
   // UPDATE
   var nodeUpdate = nodeEnter.merge(node);
@@ -232,8 +276,20 @@ function update(source) {
     return path
   }
 
-  // Toggle children on click.
-  function click(d) {
+
+var cards;
+
+function click(d) {  
+    // cards = $(".fa-address-card-o") || {}
+    // cards.click(function(e){
+    //   console.log(e.target)
+    // })
+    // cards.tipsy({ 
+    //     gravity: 'w', 
+    //     html: true, 
+    //     title:'hello'
+    //   });
+
     if (d.children) {
         d._children = d.children;
         d.children = null;
@@ -244,6 +300,12 @@ function update(source) {
     update(d);
   }
 }
+
+
+
+  
+
+});
 
 </script>
 </body>
