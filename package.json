@@ -1,0 +1,11 @@
+{
+  "name": "simple-org-chart",
+  "version": "1.0.0",
+  "description": "made for Matt B",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
