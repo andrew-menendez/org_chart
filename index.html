@@ -29,8 +29,17 @@
 
 <body>
 
+<h3 id='yo'>Example Org Chart for Matt B</h3>
 
+<div id='chart'>
+</div>
 
+<h3>Info</h3>
+<div id='moreinfo'>
+<span>Name: </span><span id='namedisplay'></span> 
+<br>
+<span>Location: </span><span id='locdisplay'></span>
+</div>
   
 <script src="https://use.fontawesome.com/30579762f6.js"></script>
 
@@ -60,7 +69,8 @@ var treeData =
         "type":"dep",
         "children": [
           { "name": "Amanda S",
-            "children": [{"name":"Dylan R"}]
+            "location":"SF",
+            "children": [{"name":"Dylan R","location":"SF"}]
            }
         ]
       },
@@ -68,19 +78,29 @@ var treeData =
         "type":"dep",
         "children":[
           {"name": "Yossi",
-          "children":[{"name":"Will A"},{"name":"Andrew B"},{"name":"Tal D"},{"name":"Will F"}, {"name":"Nick L"},{"name":"Tom M"},{"name":"Andrew M"},{"name":"Yoav M"},{"name":"Melissa Z"}
-          ]
+          "location":"TLV",
+          "children":[
+              {"name":"Will A","location":"SF"},
+              {"name":"Andrew B","location":"NYC"},
+              {"name":"Tal D","location":"TLV"},
+              {"name":"Will F","location":"NC"},
+              {"name":"Nick L","location":"SF"},
+              {"name":"Tom M","location":"TLV"},
+              {"name":"Andrew M","location":"SF"},
+              {"name":"Yoav M","location":"TLV"},
+              {"name":"Melissa Z","location":"NYC"}]
         }]
       },
       {"name":"Customer Success Strategists",
       "type":"dep",
-      "children":[{"name":"Jaclyn D"}, {"name":"Amy L"}]
+      "children":[{"name":"Jaclyn D","location":"SF"}, {"name":"Amy L","location":"SF"}]
       },
       {"name":"UX/ UI Design",
       "type":"dep",
       "children":[
         {"name":"Matt B",
-        "children":[{"name":"Gintah T"}, {"name":"Lea G"}, {"name":"Allie V"}]
+        "location":"SF",
+        "children":[{"name":"Gintah T","location":"SF"}, {"name":"Lea G","location":"NC"}, {"name":"Allie V","location":"TLV"}]
         }]
       }
     ]
@@ -94,7 +114,7 @@ var margin = {top: 20, right: 90, bottom: 30, left: 90},
 // append the svg object to the body of the page
 // appends a 'group' element to 'svg'
 // moves the 'group' element to the top left margin
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -180,12 +200,12 @@ function update(source) {
     .attr("x", "20px")
     .attr("y", "12px")
     .html(function(d){
-      console.log(d.data)
+      //console.log(d.data)
       if (d.data.type === "dep"){
         return ''
       }
       else {
-        return '<i class="fa fa-address-card-o" aria-hidden="true"></i>'
+        return '<i class="fa fa-address-card-o" aria-hidden="true" data-location="'+d.data.location+ '" data-name='+d.data.name+' "></i>'
       } 
     })
     // .on('click', function(d,i){
@@ -277,18 +297,26 @@ function update(source) {
   }
 
 
-var cards;
+
+var cards = $(".fa-address-card-o")|| {}
+console.log(cards)
+console.log("render");
+
+// am mouseover function for the cards
+
+var locdisplay = $("#locdisplay");
+var namedisplay = $("#namedisplay");
+
+$(".fa-address-card-o").mouseover(function(e){
+      var card = $(this);
+      var location = card.attr("data-location")
+      var name = card.attr("data-name")
+
+      locdisplay.text(" "+location);
+      namedisplay.text(" "+ name);
+})
 
 function click(d) {  
-    // cards = $(".fa-address-card-o") || {}
-    // cards.click(function(e){
-    //   console.log(e.target)
-    // })
-    // cards.tipsy({ 
-    //     gravity: 'w', 
-    //     html: true, 
-    //     title:'hello'
-    //   });
 
     if (d.children) {
         d._children = d.children;
@@ -300,10 +328,6 @@ function click(d) {
     update(d);
   }
 }
-
-
-
-  
 
 });
 
